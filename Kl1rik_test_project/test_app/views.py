@@ -23,7 +23,7 @@ def index(request):
             print(row)
         db.connections.close_all()
         return HttpResponse(f"<h3>Спасибо за ваш отзыв , {name}</h3>" 
-                            f"<h3>Всего отзывов, {random.randint(0,999)}</h3>" 
+                            f"<h3>Всего отзывов : {random.randint(0,999)}</h3>" 
                            )
     else:
         userform = UserForm()
