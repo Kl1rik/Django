@@ -1,0 +1,32 @@
+version: "3.0"
+
+services:
+  db:
+    container_name: mysql-container
+    image: mysql:latest
+    environment:
+      
+        MYSQL_ROOT_PASSWORD: 'example'
+        MYSQL_DATABASE: 'test'
+        MYSQL_USER: 'test'
+        MYSQL_PASSWORD: 'testtest'
+    ports:
+        - "30306:3306"  
+  
+   
+  adminer:
+      image: adminer:latest
+      restart: always
+      ports:
+        - '38080:8080'
+      depends_on: 
+        - db   
+
+
+  django:
+    container_name: django-container
+    image: django_feedback_compose:dockerv1.3
+    ports:
+      - "30080:8000"
+    depends_on:
+      - db      
