@@ -2,21 +2,67 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import UserForm
 from django import db
-import sqlite3
+
+import mysql.connector
 import random
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def index(request):
     if request.method == "POST":
-        my_path = "C:\\Users\\kyrill\\Documents\\GitHub\\Django_python\\Kl1rik_test_project\\feedback.db"
-        connection = sqlite3.connect(my_path)
-        cursor = connection.cursor()
- 
+        # change host-name for each platform(EX. mysql-pod/mysql-container)
+        conn = mysql.connector.connect(
+                host='mysql-pod',
+                user='test',
+                password='testtest',
+                database='test'
+            )
+        cursor = conn.cursor()
+        print("connect success")
         name = request.POST.get("name")
         age_group = request.POST.get("age_group")
         feedback = request.POST.get("feedback")
         print(name,age_group,feedback)
-        cursor.execute("INSERT INTO Feedback (Name,AgeGroup,Feedback) VALUES (?,?,?)",(name,age_group,feedback,))
-        connection.commit()
+        # query = """
+        #     CREATE TABLE Feedback (
+        #         Name CHAR(255),
+        #         AgeGroup CHAR(255),
+        #         Feedback CHAR(255)
+        #         )
+        #     VALUES (%s, %s, %s)
+        #     """
+        # values = (name,age_group,feedback)
+        # cursor.execute(query, values)
+        query = """
+            INSERT INTO Feedback (Name,AgeGroup,Feedback)
+            VALUES (%s, %s, %s)
+            """
+        values = (name,age_group,feedback)
+        cursor.execute(query, values)
+
+
+        
+        conn.commit()
         cursor.execute("SELECT * FROM Feedback")
         rows = cursor.fetchall()
         for row in rows : 
